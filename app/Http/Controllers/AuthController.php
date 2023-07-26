@@ -25,6 +25,23 @@ class AuthController extends Controller
             'access_token' => $user->createToken('api_token') ->plainTextToken,
             'token_type' => "Bearer",
         ]);
+    } 
+
+    // Register
+    public function register(Request $request){
+        $validated = $request->validate([
+        'name' => 'required|max:255',
+        'email' => 'required|max:255|email|unique:users, email',
+        'password' => 'required|confirmed|min:6'
+      ]);
+
+
+      $user = User::create($validated); 
+      return response()->json([
+        'data' => $user,
+        'access_token' => $user->createToken('api_token') ->plainTextToken,
+        'token_type' => "Bearer",
+    ], 201);
     }
     //
 }
